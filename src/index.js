@@ -1,8 +1,10 @@
+const getBlockBuildings = (block) => Object.keys(block);
+
 const computeBuildingPositions = (blocks, reqs) => {
 	const positions = {};
 
 	for (let i = 0; i < blocks.length; i++) {
-		Object.keys(blocks[i])
+		getBlockBuildings(blocks[i])
 			.filter(building => reqs.indexOf(building) !== -1)
 			.forEach(building => {
 
@@ -17,14 +19,17 @@ const computeBuildingPositions = (blocks, reqs) => {
 }
 
 const computeBlocksScorings = (blocks, reqs, positions) => {
-	const scoring = {};
+	const scoring = [];
 
 	for (let i = 0; i < blocks.length; i++) {
-		Object.keys(blocks[i])
+		const block = blocks[i];
+		scoring[i] = 0;
+
+		getBlockBuildings(block)
 			.filter(building => reqs.indexOf(building) !== -1)
 			.forEach(building => {
 				let distance = blocks.length + 1;
-				if (blocks[i][building]) {
+				if (block[building]) {
 					distance = 0;
 				} else {
 					distance = Math.min(...positions[building].map(p => {
@@ -32,41 +37,32 @@ const computeBlocksScorings = (blocks, reqs, positions) => {
 					}));
 				}
 
-				scoring[i] = {
-					...scoring[i] || { totalScore: 0 },
-					[building]: distance
-				};
-
-				scoring[i].totalScore += distance;
+				scoring[i] += distance;
 			});
 	}
 
 	return scoring;
 }
 
-const buildResult = (scoring, blocks) => {
-	const results = [];
+const buildResult = (scoring) => {
+	const bestScore = Math.min(...scoring);
 
-	if (Object.keys(scoring).length) {
-		const totalScores = Object.keys(scoring)
-			.map(block => scoring[block].totalScore);
-		const bestScore = Math.min(...totalScores);
-
-		for (let i = 0; i < blocks.length; i++) {
-			if (scoring[i].totalScore === bestScore) {
-				results.push(i.toString());
-			}
+	const res = [];
+	scoring.reduce((acc, _, i) => {
+		if (_ === bestScore) {
+			acc.push(i.toString());
 		}
-	} else {
-		return [...Object.keys(blocks)];
-	}
+		return acc;
+	}, res);
 
-	return results;
+	return res;
 }
 
 module.exports = (blocks, reqs) => {
 	const positions = computeBuildingPositions(blocks, reqs);
 	const scoring = computeBlocksScorings(blocks, reqs, positions);
 
-	return buildResult(scoring, blocks);
+	const result = buildResult(scoring, blocks);
+
+	return result;
 };
