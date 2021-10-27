@@ -1,6 +1,7 @@
 const getBlockBuildings = (block) => Object.keys(block);
 
 /**
+ * Compute all required building positions.
  * 
  * @param {*} blocks 
  * @param {*} reqs 
@@ -13,8 +14,8 @@ const computeBuildingPositions = (blocks, reqs) => {
 		getBlockBuildings(blocks[i])
 			.filter(building => reqs.indexOf(building) !== -1 && blocks[i][building] === true)
 			.forEach(building => {
-					positions[building] = positions[building] || [];
-					positions[building].push(i);
+				positions[building] = positions[building] || [];
+				positions[building].push(i);
 			});
 	}
 
@@ -22,11 +23,14 @@ const computeBuildingPositions = (blocks, reqs) => {
 }
 
 /**
+ * Compute "scoring" for each block, depending on requirements
  * 
  * @param {*} blocks 
  * @param {*} reqs 
  * @param {*} positions 
  * @returns
+ * 
+ * Do not know how to compute this information. If someone want to explain me through a PR..
  * 
  * Time complexity: O(blocks * blockBuildings * reqs) 
  * Space complexity: O(blocks)
@@ -52,7 +56,11 @@ const computeBlocksScorings = (blocks, reqs, positions) => {
 	return scoring;
 }
 
-
+/**
+ * Find all entry that match the lower distance to requirements.
+ * @param {*} scoring 
+ * @returns 
+ */
 const buildResult = (scoring) => {
 	const bestScore = Math.min(...scoring);
 
