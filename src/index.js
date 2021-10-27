@@ -1,23 +1,36 @@
 const getBlockBuildings = (block) => Object.keys(block);
 
+/**
+ * 
+ * @param {*} blocks 
+ * @param {*} reqs 
+ * @returns 
+ */
 const computeBuildingPositions = (blocks, reqs) => {
 	const positions = {};
 
 	for (let i = 0; i < blocks.length; i++) {
 		getBlockBuildings(blocks[i])
-			.filter(building => reqs.indexOf(building) !== -1)
+			.filter(building => reqs.indexOf(building) !== -1 && blocks[i][building] === true)
 			.forEach(building => {
-
-				if (blocks[i][building]) {
 					positions[building] = positions[building] || [];
 					positions[building].push(i);
-				}
 			});
 	}
 
 	return positions;
 }
 
+/**
+ * 
+ * @param {*} blocks 
+ * @param {*} reqs 
+ * @param {*} positions 
+ * @returns
+ * 
+ * Time complexity: O(blocks * blockBuildings * reqs) 
+ * Space complexity: O(blocks)
+ */
 const computeBlocksScorings = (blocks, reqs, positions) => {
 	const scoring = [];
 
@@ -26,16 +39,11 @@ const computeBlocksScorings = (blocks, reqs, positions) => {
 		scoring[i] = 0;
 
 		getBlockBuildings(block)
-			.filter(building => reqs.indexOf(building) !== -1)
+			.filter(building => reqs.indexOf(building) !== -1 && block[building] === false)
 			.forEach(building => {
-				let distance = blocks.length + 1;
-				if (block[building]) {
-					distance = 0;
-				} else {
-					distance = Math.min(...positions[building].map(p => {
-						return Math.abs(i - p);
-					}));
-				}
+				const distance = Math.min(...positions[building].map(p => {
+					return Math.abs(i - p);
+				}));
 
 				scoring[i] += distance;
 			});
@@ -43,6 +51,7 @@ const computeBlocksScorings = (blocks, reqs, positions) => {
 
 	return scoring;
 }
+
 
 const buildResult = (scoring) => {
 	const bestScore = Math.min(...scoring);
@@ -59,9 +68,9 @@ const buildResult = (scoring) => {
 }
 
 module.exports = (blocks, reqs) => {
+
 	const positions = computeBuildingPositions(blocks, reqs);
 	const scoring = computeBlocksScorings(blocks, reqs, positions);
-
 	const result = buildResult(scoring, blocks);
 
 	return result;
