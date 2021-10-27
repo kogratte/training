@@ -1,5 +1,3 @@
-[![Node.js CI](https://github.com/kogratte/training/actions/workflows/node.js.yml/badge.svg)](https://github.com/kogratte/training/actions/workflows/node.js.yml)
-
 # Training
 
 This little exercice is issued from a google interview.
