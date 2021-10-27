@@ -8,7 +8,7 @@ Source: [Youtube](https://www.youtube.com/watch?v=rw4s4M3hFfs)
 
 The exercice is pretty simple, but funny to achieve.
 
-# Input & Expectations
+# Input
 
 Imagine a city, organised with blocks. Each blocks has some buildings, like a store, a bank...
 
@@ -53,3 +53,16 @@ If I live in the 5th block, I'll have to walk 1 to stadium, 0 to store.
 This is, for all of this blocks, the closest distance I have to walk to fill all my requirements.
 
 This test case is available under "tests/example3".
+
+# Expectations
+
+The method you've to implement should implement the following prototype:
+```javascript
+module.exports = (blocks, reqs) => {
+};
+```
+
+where blocks is something like the provided examples, and reqs are the requirements for research.
+
+Your implementation has to return an array of elligible blocks.
+
