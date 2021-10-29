@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --ci",
-    "test:unit": "jest --watch --maxWorkers=25%"
+    "test:unit": "jest --watch --maxWorkers=25%",
+    "bench": "hyperfine 'node benchmark1.js' 'node benchmark2.js'"
   },
   "author": "",
   "license": "ISC",
